@@ -1,0 +1,359 @@
+---
+title: "A deeper look into the shortcomings of the Cross City Tunnel"
+subtitle: "_Using the t-test and ANOVA-test to understand Sydney's shortest tollway_"
+date: "University of Sydney | MATH1005 | Lab Class 10"
+author: "510415022"
+output:
+  html_document:
+    fig_caption: yes
+    number_sections: yes
+    self_contained: yes
+    theme: flatly
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: hide
+bibliography: references.bib
+nocite: '@*'
+---
+
+<br>
+
+# Executive Summary
+The aim of this report is to use statistical tests to gain a deeper insight into the failures of Sydney's Cross City Tunnel (CCT), operated by the monopolistic _Transurban_ organisation. The CCT has encountered public backlash since its inception, with its ignominy only growing after entering voluntary administration twice in just eight years. This report uses a one-sample T-test and a one-way ANOVA to determine statistically significant correlations relating to the tunnel, including exposing the 58.8% difference between expected and observed patronage. Ultimately, the CCT is a world-class example of broken forecasting and prediction models, and is forever engrained in Sydney's history as a blundered infrastructure project.
+
+<br>
+
+# Full Report
+
+## Initial Data Analysis (IDA)
+
+### Source
+
+Transurban's increasing monopoly on tollways [@TransurbanArticle1; @TransurbanArticle3; @TransurbanArticle4], with the Sydney Harbour crossings the "only 2 out of Australia’s 23 toll roads" not under their "stranglehold" [@TransurbanArticle2], caused the Australian Competition & Consumer Commission (ACCC) to enforce obligations on Transurban to "publish Specified Traffic Data on a quarterly basis" from 2009 onwards [@TransurbanACCC]. The data used in this report has been sourced from these publications (found on [Transurban's website](https://nswtollroaddata.com)).
+
+Though concerns have been raised in the past [@CCTwiki], it is unlikely that the already teetering Transurban would tamper with their toll data on the legal stage (ACCC acts by the Competition and Consumer Act 2010 (Cth)). This generally supports the data's reliability and validity. The data should also be accurate considering each "count" of a vehicle is only based on the toll gantry's recognition of an e-TAG (the CCT was Sydney's first cash-free tollway). This technology is connected to each driver's license plate, allowing for accurate differentiation between class of vehicle as well.
+
+Primary stakeholders of this report include companies wanting to invest into tollway projects and governments or road engineers looking to learn from past infrastructure projects.
+
+### Variables
+
+```{r}
+data = read.csv("traffic.csv") # importing data
+head(data)
+
+cols = dim(data)[2]
+rows = dim(data)[1]
+cat("There are", cols, "columns in the dataset.\nThere are", rows, "rows in the dataset.")
+```
+
+The CCT runs East (towards Kings Cross) and West (towards Darling Harbour) while also intersecting with the North-South-running Eastern Distributor (ED) (see Figure below). The dataset provides traffic data for 3 toll gantries (as per the `GantryLocation` variable):
+
+- `Sir John Young` (SJY): vehicles travelling from the East to the North (onto the ED)
+- `Mainline Eastbound`: vehicles travelling from the West to the East^[It is ambiguous whether the data provided includes vehicles which exited to merge southbound on the ED.]
+- `Mainline Westbound`: vehicles travelling from the East to the West^[It is ambiguous whether the data provided includes vehicles which joined from northbound ED to travel westbound on the CCT. The reason these cases are ambiguous is because SJY and the ED are *both* exits in the network, however only SJY has been separated as its own gantry. For the purposes of this report, it is safer to assume the data does count these vehicles.]
+
+```{r cct_schematic, fig.align = 'center', out.width = "100%", fig.cap = "A schematic map of the Cross City Tunnel^[[Source](https://www.linkt.com.au/using-toll-roads/about-sydney-toll-roads/cross-city-tunnel/sydney)]"}
+knitr::include_graphics("img/cct_linkt.svg")
+```
+
+Data is recorded for each gantry in 15 minute intervals split by `VehicleClass` (car or truck). Thus there are $3 \, \text{gantries} \times 2 \, \text{vehicle classes} = 6 \, \text{entries}$ per time interval. Each entry has 14 related variables, of which the most important are:
+
+- `Date`
+- `IntervalStart` and `IntervalEnd`
+- `VehicleClass`
+- `GantryDirection` (which direction is the traffic directed in)
+- `TotalVolume` (the total count of traffic in this entry)
+
+Let's examine the structure of this data to see if R has imported each variable with the correct datatype.
+
+```{r}
+str(data)
+```
+
+```{r}
+cat("The variable 'Date' is of type:", class(data$Date))
+```
+
+We can convert the `Date` variable from `character` into `DateTime` format, however we will leave the `Interval` variables as strings --- converting to `POSIXlt` format automatically appends a redundant date alongside the time.
+
+```{r}
+data$Date = as.Date(data$Date)
+cat("The variable 'Date' is of type:", class(data$Date))
+```
+
+<br>
+
+## Did Sydney's Cross City Tunnel live up to its expectations?
+
+The largest undoing of the CCT was its blatant overestimation of traffic volume. According to the First Report [@FirstReport]^[See Notes 5.84 and 5.85.], the forecast daily traffic figures for the final tunnel were up to 90,000 by 2006 and 101,700 vehicles by 2016. Notably, a transport planner of the time said it was "physically impossible" for the tunnel to carry such amounts of traffic. Adding to the project's ignominy, only 20,000 drivers utilised the tunnel in the first days after its inauguration in 2005, partly due to boycotts against the project [@Boycotts].
+
+Let us examine where the tunnel usage stands as of today.
+
+```{r}
+data["Year"] = as.numeric(format(data$Date,'%Y')) # creating a new "Year" column
+
+# creating a new dataframe for each year
+data_2019 = data[data$Year == "2019",]
+data_2020 = data[data$Year == "2020",]
+```
+
+```{r message = FALSE}
+library("dplyr") # loading package required for the "group_by" function
+library("tufte")
+```
+
+```{r}
+# using pipes we can calculate the overall traffic volume for each day
+daily_volume_2019 =  data_2019 %>% group_by(Date) %>% summarize(daily_traffic = sum(TotalVolume)) 
+head(daily_volume_2019)
+
+# same steps are repeated for 2020
+daily_volume_2020 =  data_2020 %>% group_by(Date) %>% summarize(daily_traffic = sum(TotalVolume))
+head(daily_volume_2020)
+
+# calculating average daily traffic for 2019 and 2020 data 
+avg_2019 = round(mean(daily_volume_2019$daily_traffic))
+avg_2020 = round(mean(daily_volume_2020$daily_traffic))
+cat("The average number of vehicles through the CCT in March 2019 was", avg_2019, 
+    "\nThe average number of vehicles through the CCT in March 2020 was", avg_2020)
+
+# 2019 PLOT
+plot(daily_volume_2019, 
+     type = "o", 
+     main = "Total vehicle movement through CCT in March 2019", 
+     xlab = "Date", 
+     ylab = "Vehicle count", 
+     ylim = c(10000, 50000))
+abline(h = avg_2019, col = "red", lty = 2)
+
+# 2020 PLOT
+plot(daily_volume_2020, 
+     type = "o", 
+     main = "Total vehicle movement through CCT in March 2020", 
+     xlab = "Date", 
+     ylab = "Vehicle count", 
+     ylim = c(10000, 50000))
+abline(h = avg_2020, col = "red", lty = 2)
+```
+
+```{r}
+diff = 101700 - 41940
+percent_difference = round((abs(41940 - 101700)/101700)*100, 1)
+```
+
+There is a `r percent_difference`% difference between expected and actual values (an underestimate of `r diff` vehicles). In other words, the tunnel did not even reach half of its forecast traffic levels.
+
+Some cause for this may be the 'optimism bias' in the traffic forecasts of tollroads, discussed both in Phibbs' analysis of the CCT [@DrivingAlone] and also the First Report [@FirstReport].
+
+<br>
+
+> The study has confirmed the existence of overforecasting asset use --- or what is commonly referred to in the industry as **optimism bias** ... On average, across all toll roads, bridges and tunnels, forecasts overestimate traffic in the first year by 20 to 30 per cent.
+>
+> -- <cite>Note 5.94 from the Joint Select Committee's "First Report"</cite>
+
+<br>
+
+### One-sample T-test
+
+Let us conduct a one-sample T-test to statistically test the differences between the expected value of 101,700 and the observed daily traffic values in March 2019.
+
+<br>
+
+#### Hypothesis
+
+$$H_0: \, \text{The average daily traffic count in March 2019 is equal to the predicted value of} \, \,101700: \mu_{2019} = \mu_0 = 101700$$
+$$H_1: \, \text{The average daily traffic count in March 2019 is not equal to the predicted value of} \, \,101700: \mu_{2019} \neq \mu_0 = 101700$$
+We will use a significance level of $\alpha = 0.05$ by convention.
+
+<br>
+
+#### Assumptions
+
+1. Each of our traffic observations are independent of each other --- the existence of one vehicle travelling in the CCT does not imply the existence of another.
+2. Even though the data itself is not normal (see histogram below), the sample size (thousands of vehicles per day) is large enough such that normality of the sample means can be assumed.
+
+```{r}
+hist(daily_volume_2019$daily_traffic, xlab = "Daily traffic", main = "Frequency of daily traffic counts through the CCT")
+```
+
+#### T-value and p-value
+
+```{r}
+OV_2019 = daily_volume_2019["daily_traffic"]
+
+# setting up a two-sided t-test with mu = expected_value and a 95% confidence interval
+t_test_IQ1 = t.test(OV_2019, mu = 101700, conf = 0.95, alternative = "two.sided")
+print(t_test_IQ1)
+```
+
+The t-value for this test is ~ -63.6, implying that the observed value in 2019 is ~63.6 standard errors away from the expected value predicted in 2005. Naturally, this leads to a p-value of almost zero.
+
+<br>
+
+#### Conclusion
+
+There is little doubt that the null hypothesis is to be rejected. The data provides substantial evidence that the CCT traffic forecasts were horribly blundered.
+
+<br>
+
+**Summary of the research question:** The CCT sets a worldwide precedent on the dangers of "optimism bias" in making predictions and models. Indeed, the CCT's traffic forecasting woes ensured that the tunnel would never even come close to living up to its self-set expectations.
+
+<br>
+
+## Given the current patronage of the tunnel, how many drivers are travelling in which directions?
+
+As stated in the IDA, the dataset provided explicitly mentions three directions: East, West, and North (see `GantryDirection` variable). Let us group by two variables this time in order to calculate the number of drivers travelling in a specific direction per day.
+
+```{r message=FALSE}
+directed_traffic = data %>% group_by(Date, GantryDirection) %>% summarize(daily_traffic = sum(TotalVolume))
+head(directed_traffic)
+```
+
+```{r message=FALSE}
+# import necessary package to transpose data from long to wide format
+# here we use dcast(), acast() and t() to return a transposed dataframe and table
+# this will allow us to present the data in a stacked bar chart
+library(reshape2)
+directed_traffic.df = dcast(directed_traffic, Date~GantryDirection) # producing a transposed dataframe
+directed_traffic.table = acast(directed_traffic, Date~GantryDirection) # producing a transposed table
+directed_traffic.t = t(directed_traffic.table) # we transpose once again to ensure the right formatting for a stacked bar plot
+head(directed_traffic.df)
+
+# present this data in a stacked bar chart
+par(mar =  c(7, 7, 3, 1.5))
+barplot(directed_traffic.t, 
+  main = "Daily proportion of drivers heading\nNorth, East or West using the CCT", 
+  xlab = "Date", 
+  ylab = "Traffic volume", 
+  legend = rownames(directed_traffic.t),
+  ylim = c(0, 50000),
+  col = c("#e8998d", "#fed766", "#009fb7"),
+  las = 2,
+  cex.axis = 0.75,
+  cex.names = 0.6,
+  beside = FALSE,
+  mgp = c(4, 0.5, 0))
+```
+
+It seems to be quite clear from the bar chart that most drivers are heading in the East-West direction. In saying this, let us now statistically see the differences in these three groups using the ANOVA test.
+
+<br>
+
+### One-way ANOVA test
+
+We use the one-way ANOVA test to compare the means between three groups: East, West and North.
+
+<br>
+
+#### Hypothesis
+
+$$H_0: \, \text{There is no difference between group means}: \mu_{east} = \mu_{west} = \mu_{north}$$
+$$H_1: \, \text{At least one group's mean differs significantly from the other groups' means}: \mu_{east} \stackrel{?}{\neq} \mu_{west} \stackrel{?}{\neq} \mu_{north}$$
+Once again we will use a significance level of $\alpha = 0.05$ by convention.
+
+<br>
+
+#### Assumptions
+
+Assumptions are similar to those of the t-test:
+
+1. Observations are independent of one another.
+2. The sample mean follows a normal distribution.
+3. Both qualitatively (from the boxplots below) and quantitatively (using R's `var` function), it is not obvious if the variance within each group being compared is similar. We examine this below:
+
+```{r}
+### CHECKING IF VARIANCE IS HOMOGENEOUS ###
+
+# Rule of thumb: the SD of the largest mean should be no larger than two times the SD of the lowest mean
+
+east = directed_traffic.df$E
+west = directed_traffic.df$W
+north = directed_traffic.df$N
+
+mean_e = mean(east)
+mean_w = mean(west)
+mean_n = mean(north)
+
+cat("Mean of East:", mean_e, "\nMean of West:", mean_w, "\nMean of North", mean_n, "\n")
+
+max = c("East", "West", "North")[which.max(c(mean_e, mean_w, mean_n))]
+min = c("East", "West", "North")[which.min(c(mean_e, mean_w, mean_n))]
+
+cat("The group with the largest mean is", max, "and the group with the lowest mean is", min)
+```
+
+```{r}
+sd_e = sd(east)
+sd_n = sd(north)
+
+if (sd_e > 2*sd_n) {
+  print("The SD of the largest mean (East group) is larger than two times the SD of the lowest mean! Variance is not homogeneous.")
+} else {
+  print("The SD of the largest mean (East group) is not larger than two times the SD of the lowest mean! Variance is homogeneous.")
+}
+```
+
+```{r}
+# producing three histograms with equal axes in order to highlight the difference in frequencies
+# notice how none of these three histograms satisfy normality
+par(mfrow=c(1,3))
+hist(east, 
+     xlab = "Volume of traffic", 
+     main = "Daily frequencies of vehicles\ntravelling East on the CCT",
+     ylim = c(0, 20))
+hist(west, 
+     xlab = "Volume of traffic", 
+     main = "Daily frequencies of vehicles\ntravelling West on the CCT",
+     ylim = c(0, 20))
+hist(north, 
+     xlab = "Volume of traffic", 
+     main = "Daily frequencies of vehicles\ntravelling North on the CCT",
+     ylim = c(0, 20))
+```
+
+```{r}
+boxplot(east,
+        west,
+        north,
+        horizontal = TRUE,
+        names = c("East", "West", "North"), 
+        main = "Comparing the variance of all three groups",
+        col = c("#e8998d", "#009fb7", "#fed766"))
+```
+<br>
+
+#### Conducting the ANOVA test (F-value and p-value)
+
+```{r}
+anova = aov(daily_traffic ~ GantryDirection, data = directed_traffic)
+summary(anova)
+```
+
+The large F-value (test statistic) of 142.5 implies that there is some statistical significance between the observed variation in traffic volume and change in traffic direction.
+
+The p-value is thus almost 0. Hence, variations in traffic patterns do occur based on direction of travel.
+
+<br>
+
+#### Conclusion
+
+The data presents enough evidence to reject the null hypothesis. Therefore, at least one group (North, East or West) statistically differs from each other.
+
+<br>
+
+#### Post-hoc testing
+
+In order to figure out which group is different, we will pursue a post-hoc test (here we use Tukey’s Honestly-Significant Difference test).
+
+```{r}
+TukeyHSD(anova)
+```
+
+The high p-value for the West-East direction shows that there is likely no statistically significant difference between the means of these groups i.e. roughly an equal number of drivers travel East to West as they do West to East. However, there is an incredible difference between N-E and W-N, seen by the almost 0 p-value. 
+
+Hence, we conclude that not only does one group statistically differ from another, but that group is the North group. **Less drivers are using the CCT to travel north compared to travelling across the city.**
+
+<br>
+
+# References
