@@ -5,7 +5,7 @@ The following repository holds any projects or assignments which I have deemed w
 Degree: Bachelor of Software Engineering/Bachelor of Science (Mathematical Sciences) (Data Science)
 
 ## Progression
-I am leaving my degree progression here as to hopefully help someone out who's anxious about changing engineering streams in the middle of their degree. I was part of the aeronautical stream in first year and then changed to software at the beginning of second year. I also swapped my BSc major from physics to data science in the middle of my first year. 
+I am leaving my degree progression here as to hopefully help a future student out. Please note that I originally started out doing a Bachelor of Aeronautical Engineering and Bachelor of Science (Physics) before changing to my current degree.
 
 A subject in **bold** means I have some coursework uploaded to this repository from that unit.
 
