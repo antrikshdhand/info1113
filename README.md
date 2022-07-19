@@ -26,7 +26,7 @@ A subject in **bold** means I have some coursework uploaded to this repository f
     
 2nd Year
 └── Semester 1 (underloaded)
-    ├── **DATA2001: Data Science, Big Data and Data Variety**
+    ├── DATA2001: Data Science, Big Data and Data Variety
     ├── **INFO1113: Object-Oriented Programming**
     └── MATH2069: Discrete Mathematics and Graph Theory
 ```
