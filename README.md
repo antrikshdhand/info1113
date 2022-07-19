@@ -2,7 +2,7 @@
 
 The following repository holds my INFO1113 2022 Semester 1 coding assignment. 
 
-This assignment took about 30-40 hours of work. As INFO1113 is a beginner Java unit, this code is not extremely beautiful nor concise, nor does it utilise any rigorous software design theory. Rather, this work was focused on learning the essence of Java including OOP, enums, generics etc.
+This assignment took about 30-40 hours of work. As INFO1113 is a beginner Java unit, this code is not extremely beautiful nor concise, nor does it utilise any rigorous software design theory. Rather, this work was focused on learning the essence of Java including OOP, enums, generics, simple data structures such as ArrayLists etc.
 
 ## Overview
 The assignment was to create a game in the Java programming language using the Processing library for graphics and gradle as a dependency manager. The game centres around a player trying to capture as much area of the map as they can whilst avoiding enemies. The level is won once a certain percentage of the map area has been captured.
