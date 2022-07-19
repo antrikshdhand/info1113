@@ -44,12 +44,3 @@ App/
 ```
 
 My code for this assignment consists of 10 classes and 2 enumerations (Material and Direction). The 10 classes are split up into 2 hierarchies (Mover and Powerup) and 3 lone classes.
-
-The abstract Mover hierarchy deals with all objects which have any sort of movement on the screen. Hence, the two subclasses for Mover are Player and Enemy. Through the use of protected attributes, this allows all basic movement attributes to be inherited by all moving objects, including x and y coordinates, the sprite which is to be moved on screen, and the current direction of movement. 
-
-The Player subclass adds methods and logic to deal with player movement, including registering keystrokes and smoothly transitioning from one tile to another. The abstract Enemy class focuses on how enemies spawn in the game (at randomised positions or at certain coordinates) as well as how enemy sprites "bounce" or "reflect" off certain objects. As this "reflecting" is a necessary feature for all Enemy objects to have, but whose implementation logic may differ from enemy to enemy, the 'checkReflections()' method is abstracted. Finally, in the third level of hierarchy, we have two separate enemies — the Worm and the Beetle. These both implement the 'checkReflections()' method different, the Beetle with the added functionality that it converts any grass it hits back into soil.
-
-I have implemented two powerups, which required some inheritance design. The abstracted Powerup class sets up logic for how powerups spawn on a random soil tile across the level map (hence why a Level object is a necessary parameter to initiate a Powerup object). All powerups must display some behaviour when activated, and hence we abstract the 'activate()' and 'deactivate()' methods. I could have made Powerup a subclass of Mover, considering that these two classes do share certain parameters and methods such as x, y, sprite, and draw(), however, as a Powerup does not actually need to be 'ticked'/updated every single frame (as it does not move), I deemed it confusing and unnecessary for this inheritance to occur.
-
-The last 3 classes (App, Level and Trail) deal with very specific, individual features, and hence do not exhibit inheritance.
-
