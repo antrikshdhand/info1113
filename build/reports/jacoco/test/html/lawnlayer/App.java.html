@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>App.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lawnlayer</a> &gt; <a href="index.source.html" class="el_package">lawnlayer</a> &gt; <span class="el_source">App.java</span></div><h1>App.java</h1><pre class="source lang-java linenums">package lawnlayer;
+
+import org.checkerframework.checker.units.qual.A;
+import processing.core.PApplet;
+import processing.core.PImage;
+import processing.data.JSONObject;
+import processing.data.JSONArray;
+import processing.core.PFont;
+
+public class App extends PApplet {
+
+<span class="fc" id="L12">    public final int WIDTH = 1280;</span>
+<span class="fc" id="L13">    public final int HEIGHT = 720;</span>
+<span class="fc" id="L14">    public final int SPRITESIZE = 20;</span>
+<span class="fc" id="L15">    public final int TOPBAR = 80;</span>
+<span class="fc" id="L16">    public final int FPS = 60;</span>
+
+    public String configPath;
+    public Level[] levels;
+    public int numberOfLives;
+    public int currentLevelNumber;
+    public Level currentLevel;
+    public Player player;
+    public Boolean won;
+    
+	public PImage grass;
+    public PImage concrete;
+    public PImage worm;
+    public PImage beetle;
+    public PImage soil;
+    public PImage ball;
+    public PImage youDied;
+    public PImage youWin;
+
+<span class="fc" id="L35">    public App() {</span>
+<span class="fc" id="L36">        this.configPath = &quot;config.json&quot;;</span>
+<span class="fc" id="L37">        this.currentLevelNumber = 0;</span>
+
+<span class="fc" id="L39">        this.won = false;</span>
+<span class="fc" id="L40">    }</span>
+
+    /**
+     * Initialise the setting of the window size.
+    */
+    public void settings() {
+<span class="fc" id="L46">        size(WIDTH, HEIGHT);</span>
+<span class="fc" id="L47">    }</span>
+
+    /**
+     * Load all resources such as images. Initialise the elements such as the player and levels.
+    */
+    public void setup() {
+
+        // Set graphics
+<span class="fc" id="L55">        frameRate(FPS);</span>
+<span class="fc" id="L56">        PFont myFont = createFont(&quot;monospaced&quot;, 28, true);</span>
+<span class="fc" id="L57">        textFont(myFont);</span>
+
+        // Load images during setup
+<span class="fc" id="L60">		this.grass = loadImage(this.getClass().getResource(&quot;grass.png&quot;).getPath());</span>
+<span class="fc" id="L61">        this.concrete = loadImage(this.getClass().getResource(&quot;concrete_tile.png&quot;).getPath());</span>
+<span class="fc" id="L62">        this.soil = loadImage(this.getClass().getResource(&quot;soil.png&quot;).getPath());</span>
+<span class="fc" id="L63">        this.worm = loadImage(this.getClass().getResource(&quot;worm.png&quot;).getPath());</span>
+<span class="fc" id="L64">        this.beetle = loadImage(this.getClass().getResource(&quot;beetle.png&quot;).getPath());</span>
+<span class="fc" id="L65">        this.ball = loadImage(this.getClass().getResource(&quot;ball.png&quot;).getPath());</span>
+<span class="fc" id="L66">        this.youDied = loadImage(this.getClass().getResource(&quot;you_died.png&quot;).getPath());</span>
+<span class="fc" id="L67">        this.youWin = loadImage(this.getClass().getResource(&quot;you_win.png&quot;).getPath());</span>
+
+        // Create player
+<span class="fc" id="L70">        this.player = new Player(this, this.ball);</span>
+
+        // Reading in JSON and creating Level array
+<span class="fc" id="L73">        JSONObject config = loadJSONObject(&quot;config.json&quot;);</span>
+<span class="fc" id="L74">        JSONArray levelsJSON = config.getJSONArray(&quot;levels&quot;);</span>
+<span class="fc" id="L75">        int numberOfLevels = levelsJSON.size();</span>
+        
+<span class="fc" id="L77">        numberOfLives = config.getInt(&quot;lives&quot;); // class variable</span>
+<span class="fc" id="L78">        levels = new Level[numberOfLevels]; // class variable</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (int i = 0; i &lt; numberOfLevels; i++) {</span>
+<span class="fc" id="L80">            JSONObject level_i_JSON = levelsJSON.getJSONObject(i);</span>
+
+<span class="fc" id="L82">            String filePath = level_i_JSON.getString(&quot;outlay&quot;);</span>
+<span class="fc" id="L83">            double goal = level_i_JSON.getDouble(&quot;goal&quot;) * 100;</span>
+<span class="fc" id="L84">            JSONArray enemiesJSON = level_i_JSON.getJSONArray(&quot;enemies&quot;);</span>
+
+<span class="fc" id="L86">            Level level_i = new Level(this, filePath, goal, enemiesJSON);</span>
+<span class="fc" id="L87">            levels[i] = level_i;</span>
+        }
+
+<span class="fc" id="L90">    }</span>
+
+    /**
+     * Draw all elements in the game by current frame including text. 
+     * This method also controls win/lose scenarios.
+    */
+    public void draw() {
+
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        if (this.won) {</span>
+<span class="nc" id="L99">            background(this.youWin);</span>
+<span class="nc" id="L100">            return;</span>
+        }
+
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        if (this.numberOfLives &lt;= 0) {</span>
+<span class="nc" id="L104">            background(this.youDied);</span>
+<span class="nc" id="L105">            return;</span>
+        }
+
+<span class="fc" id="L108">        background(50, 26, 21); // brown background</span>
+
+<span class="fc" id="L110">        this.currentLevel = this.levels[currentLevelNumber];</span>
+<span class="fc" id="L111">        currentLevel.renderLevel(); </span>
+        
+<span class="fc" id="L113">        this.writeText();</span>
+
+        // update and draw
+<span class="fc" id="L116">        this.player.tick();</span>
+<span class="fc" id="L117">        this.player.draw();</span>
+<span class="fc" id="L118">        this.currentLevel.draw();</span>
+        
+<span class="fc" id="L120">    }</span>
+
+    private void writeText() {
+
+<span class="fc" id="L124">        this.fill(255); // white text</span>
+
+        // print text: current level
+<span class="fc" id="L127">        String levelTextToPrint = String.format(&quot;Level %d&quot;, currentLevelNumber+1);</span>
+<span class="fc" id="L128">        text(levelTextToPrint, 1140, 50);</span>
+
+        // print text: lives remaining
+<span class="fc" id="L131">        String livesTextToPrint = String.format(&quot;Lives: %d&quot;, numberOfLives);</span>
+<span class="fc" id="L132">        text(livesTextToPrint, 160, 50);</span>
+
+        // print text: percentage grass
+<span class="fc" id="L135">        double percentage = currentLevel.getPercentageGrass();</span>
+<span class="fc" id="L136">        double goal = currentLevel.getGoal();</span>
+<span class="fc" id="L137">        String percentTextToPrint = String.format(&quot;%s%% / %s%%&quot;, percentage, goal);</span>
+<span class="fc" id="L138">        text(percentTextToPrint, 600, 50);</span>
+
+<span class="fc" id="L140">    }</span>
+
+    /** 
+     * Processing in-built method for key presses.
+     * Whenever a key is pressed, Processing stores the digit in this.keyCode.
+     * Calls the onKeyPress() method in Player.java.
+     */
+    public void keyPressed() {
+<span class="nc" id="L148">		player.onKeyPress(this.keyCode);</span>
+<span class="nc" id="L149">    }</span>
+
+    /**
+     * Re-renders the level from scratch (no green/red/grass tiles) 
+     * and decrements the number of lives remaining for the player.
+     */
+    public void resetLevel() {
+
+        // Create player
+<span class="nc" id="L158">        this.player = new Player(this, this.ball);</span>
+
+        // Reading in JSON and creating Level array
+<span class="nc" id="L161">        JSONObject config = loadJSONObject(&quot;config.json&quot;);</span>
+<span class="nc" id="L162">        JSONArray levelsJSON = config.getJSONArray(&quot;levels&quot;);</span>
+<span class="nc" id="L163">        int numberOfLevels = levelsJSON.size();</span>
+        
+<span class="nc" id="L165">        levels = new Level[numberOfLevels]; // class variable</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">        for (int i = 0; i &lt; numberOfLevels; i++) {</span>
+<span class="nc" id="L167">            JSONObject level_i_JSON = levelsJSON.getJSONObject(i);</span>
+
+<span class="nc" id="L169">            String filePath = level_i_JSON.getString(&quot;outlay&quot;);</span>
+<span class="nc" id="L170">            double goal = level_i_JSON.getDouble(&quot;goal&quot;) * 100;</span>
+<span class="nc" id="L171">            JSONArray enemiesJSON = level_i_JSON.getJSONArray(&quot;enemies&quot;);</span>
+
+<span class="nc" id="L173">            Level level_i = new Level(this, filePath, goal, enemiesJSON);</span>
+<span class="nc" id="L174">            levels[i] = level_i;</span>
+        }
+
+<span class="nc" id="L177">        this.numberOfLives--;</span>
+            
+<span class="nc" id="L179">    }</span>
+
+    public static void main(String[] args) {
+<span class="nc" id="L182">        PApplet.main(&quot;lawnlayer.App&quot;);</span>
+<span class="nc" id="L183">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
