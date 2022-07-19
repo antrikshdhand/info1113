@@ -1,6 +1,6 @@
 # USYD Coursework
 
-The following repository holds any projects or assignments which I have deemed worthy of sharing from my coursework at USYD. By no means is my work perfect (none of these assignments or projects scored full marks) but if this helps any students out then I'm happy to share.
+The following repository holds any projects or assignments which I have deemed worthy of sharing from my coursework at USYD. By no means is my work perfect but if this helps any students out then I'm happy to share.
 
 Degree: Bachelor of Software Engineering/Bachelor of Science (Mathematical Sciences) (Data Science)
 
