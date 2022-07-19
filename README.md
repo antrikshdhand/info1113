@@ -1,4 +1,4 @@
-# INFO1113
+# INFO1113: Lawn Layer Assignment
 
 The following repository holds my INFO1113 2022 Semester 1 coding assignment. 
 
