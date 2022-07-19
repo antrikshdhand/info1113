@@ -1,2 +1,3 @@
-# info1113
-A repo holding my INFO1113 assignment.
+# INFO1113
+
+The following repository holds my USYD INFO1113 2022 Semester 1 coding assignment.
