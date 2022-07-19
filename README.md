@@ -2,7 +2,7 @@
 
 The following repository holds my INFO1113 2022 Semester 1 coding assignment. 
 
-This assignment took about 30-40 hours of work. As INFO1113 is a beginner Java unit, this code is not extremely beautiful nor concise, nor does it utilise any rigorous software design theory. Rather, this work was focused on learning the essence of Java including OOP, enums, generics, simple data structures such as ArrayLists etc.
+This assignment took about 30-40 hours of work. As INFO1113 is a beginner Java unit, this code is not extremely beautiful nor concise, nor does it utilise any rigorous software design theory. Rather, this work was focused on learning the essence of Java including OOP (encapsulation, inheritance, polymorphism), enums, simple data structures such as ArrayLists etc.
 
 ## Overview
 The assignment was to create a game in the Java programming language using the Processing library for graphics and gradle as a dependency manager. The game centres around a player trying to capture as much area of the map as they can whilst avoiding enemies. The level is won once a certain percentage of the map area has been captured.
@@ -23,4 +23,33 @@ Download the repository and `cd` into the root directory before running `gradle 
 ## Known issues
 This assignment did not score full marks, albeit still scoring at a DI level. The primary reason for this was my 'flood fill' algorithm — the algorithm used to convert tiles the player has captured from dirt to grass. My algorithm only worked as intended for the instances where the captured area was connected to the top left portion of the map. This is because I begin the algorithm at the (0, 20) tile. If the captured area does not include this portion of the map, then it fills in the other half of the map. This area is almost always greater than the required percentage for success, moving the player on to the next level.
 
-Other issues include glitches upon the activation of a powerup and the lack of red tile propagation — the player's entire progress path turns red instantly. Testing was definitely not done to a high enough standard, evident by the low test coverage.
+Other issues include glitches upon the activation of a powerup and the lack of red tile propagation — the player's entire progress path turns red instantly. Testing was definitely not done to a high enough standard, evident by the low test coverage. 
+
+## Code design
+
+![UMLDiagram](https://user-images.githubusercontent.com/97012075/179748738-2e26bd02-2007-478c-b995-22456a4de583.png)
+
+```bash 
+Mover/
+├─ Player
+├─ Enemy/
+│  ├─ Beetle
+│  ├─ Worm
+Powerup/
+├─ Slow
+├─ Speed
+Level/
+Trail/
+App/
+```
+
+My code for this assignment consists of 10 classes and 2 enumerations (Material and Direction). The 10 classes are split up into 2 hierarchies (Mover and Powerup) and 3 lone classes.
+
+The abstract Mover hierarchy deals with all objects which have any sort of movement on the screen. Hence, the two subclasses for Mover are Player and Enemy. Through the use of protected attributes, this allows all basic movement attributes to be inherited by all moving objects, including x and y coordinates, the sprite which is to be moved on screen, and the current direction of movement. 
+
+The Player subclass adds methods and logic to deal with player movement, including registering keystrokes and smoothly transitioning from one tile to another. The abstract Enemy class focuses on how enemies spawn in the game (at randomised positions or at certain coordinates) as well as how enemy sprites "bounce" or "reflect" off certain objects. As this "reflecting" is a necessary feature for all Enemy objects to have, but whose implementation logic may differ from enemy to enemy, the 'checkReflections()' method is abstracted. Finally, in the third level of hierarchy, we have two separate enemies — the Worm and the Beetle. These both implement the 'checkReflections()' method different, the Beetle with the added functionality that it converts any grass it hits back into soil.
+
+Note that many methods amongst these classes are private or protected. Data encapsulation is a key OOP principle which I used while designing my code to prevent misuse or accidental calls to related functions. Most private methods are only ever called via another method, and should not be called on their own (hence the private access modifier). Most private attributes have their own getter or setter functions to prevent any other class accessing these values easily.
+
+If I were to improve on my design I would perhaps consider modifying my Trail class in order to allow it to be a subclass of the Player class. This logically makes sense as a Player can exist without a trail, but a trail cannot exist without a player: a HAS-A relationship (aggregation).
+
