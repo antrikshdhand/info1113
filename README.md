@@ -29,4 +29,9 @@ A subject in **bold** means I have some coursework uploaded to this repository f
     ├── DATA2001: Data Science, Big Data and Data Variety
     ├── **INFO1113: Object-Oriented Programming**
     └── MATH2069: Discrete Mathematics and Graph Theory
+└── Semester 2
+    ├── **SOFT2201: Software Construction and Design 1**
+    ├── SOFT2412: Agile Software Development Practices
+    ├── ISYS2120: Data and Information Management
+    └── ELEC1601: Introduction to Computer Systems
 ```
