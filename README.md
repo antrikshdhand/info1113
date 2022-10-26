@@ -14,7 +14,7 @@ A subject in **bold** means I have some coursework uploaded to this repository f
 ├── Semester 1
 │   ├── **AERO1560: Introduction to Aerospace Engineering**
 │   ├── ENGG1810: Introduction to Engineering Computing
-│   ├── MATH1002: Linear Algebra
+│   ├── **MATH1002: Linear Algebra**
 │   ├── MATH1921: Calculus Of One Variable (Advanced)
 |   └── PHYS1903: PHYS1903: Physics 1A (Special Studies Program)
 └── Semester 2
@@ -22,16 +22,15 @@ A subject in **bold** means I have some coursework uploaded to this repository f
     ├── AMME1802: Engineering Mechanics
     ├── DATA1002: Informatics: Data and Computation
     ├── **MATH1005: Statistical Thinking with Data**
-    └── MATH1023: Multivariable Calculus and Modelling
+    └── **MATH1023: Multivariable Calculus and Modelling**
     
 2nd Year
-└── Semester 1 (underloaded)
+└── Semester 1
     ├── DATA2001: Data Science, Big Data and Data Variety
     ├── **INFO1113: Object-Oriented Programming**
     └── MATH2069: Discrete Mathematics and Graph Theory
 └── Semester 2
-    ├── **SOFT2201: Software Construction and Design 1**
-    ├── SOFT2412: Agile Software Development Practices
-    ├── ISYS2120: Data and Information Management
+    ├── **SOFT2412: Agile Software Development Practices**
+    ├── **ISYS2120: Data and Information Management**
     └── ELEC1601: Introduction to Computer Systems
 ```
