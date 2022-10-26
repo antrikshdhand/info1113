@@ -32,5 +32,5 @@ A subject in **bold** means I have some coursework uploaded to this repository f
 └── Semester 2
     ├── <b>SOFT2412: Agile Software Development Practices</b>
     ├── <b>ISYS2120: Data and Information Management</b>
-    └── ELEC1601: Introduction to Computer Systems
+    └── <b>ELEC1601: Introduction to Computer Systems</b>
 </pre>
