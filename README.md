@@ -38,7 +38,7 @@ A subject in **bold** means I have some coursework uploaded to this repository f
 └── Intensive January
     └── <b>MATH1115: Interrogating Data</b> 
 └── Semester 1
-    ├── <b>COMP2017: System's Programming</b>
+    ├── <b>COMP2017: Systems Programming</b>
     ├── <b>COMP2123: Data Structures and Algorithms</b>
     ├── ISYS2110: Analysis and Design of Web Info Systems
     └── STAT2011: Probability and Estimation Theory
