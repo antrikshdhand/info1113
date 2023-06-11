@@ -1,0 +1,262 @@
+---
+title: "The Great Resignation: worth it or not?"
+subtitle: "MATH1115: Project 2"
+author: "Antriksh Dhand -- 510415022"
+date: "University of Sydney | MATH1115 | `r format(Sys.time(), '%B %Y')`"
+output: 
+  html_document:
+    code_folding: hide
+    code_download: true
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    number_section: true
+    theme: bootstrap
+    self_contained: yes
+bibliography: references.bib
+nocite: '@*'
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+# Executive Summary
+
+This report analyses IBM employee data to statistically determine whether employees who change jobs more frequently display a higher level of job satisfaction and salary. Highly relevant in the recent times of the Great Resignation, the study uses descriptive statistics and the $\chi^2$ Goodness of Fit statistical test to uncover whether the benefits of "job-hopping" can be generalised to the general population. The report concludes with recommendations for young workers to focus on excelling at their work rather than worrying about "losing out" by staying in one organisation for a long period of time.
+
+# Initial Data Analysis (IDA)
+
+The data source is a fictional data set manufactured by IBM data scientists for their own internal investigation on employee attrition, the process of employees leaving the workforce and not being immediately replaced. Although attrition is a natural process which takes place in any workforce, it is important for a company such as IBM to analyse and understand attrition trends in order to identify areas of improvement which may lead to better employee retention.
+
+It is unknown to what extent the dataset has been contrived. Was this dataset originally based off real IBM employee data and then anonymised to be released to the public domain, or is all the data completely fictitious? This is a major limitation of the dataset — any analysis is only as good as the data you start with (GIGO), and so users of the data have little idea as to whether their results and recommendations are valid at all (see [this Kaggle thread](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset/discussion/31843?sort=votes) for more). For the purposes of this project, it will be assumed that the data is anonymised IBM employee data, to allow some grounding to our findings.
+
+Lastly, another limitation of the dataset is the lack of a rigorous data dictionary to accompany it. Users of the data are left to their own imaginations to decide what the values in each column mean based on a short attribute name. It is for this reason that many columns had to be dropped from our investigation, simply because they were unworkable (see the data cleaning section below).
+
+The dataset has been licensed through the [Database Contents Licence](https://opendatacommons.org/licenses/odbl/summary/) which allows us to share, create, and adapt the original dataset for our own public work.
+
+## Data cleaning
+
+Now, let's take a look at the structure of the original dataset using `dplyr`'s `glimpse()` function.
+
+```{r, message=FALSE}
+# importing dataset
+employees <- read_csv("ibm_employee_attrition.csv") %>%
+  janitor::clean_names()
+
+glimpse(employees)
+```
+
+Looking at the output above, we observe:
+
+- `attrition` and `over_time` have been encoded as `character` attributes while they are actually `logical` variables.
+- Several variables need to be re-encoded as of type `factor`. These include:
+  - `business_travel`: `r unique(employees$business_travel)`.
+  - `department`: `r unique(employees$department)`
+  - `education`: 1 - Below College, 2 - College, 3 - Bachelor, 4 - Master, 5 - Doctor
+  - `education_field`: `r unique(employees$education_field)`
+  - `environment_satisfaction`: 1 - Low, 2 - Medium, 3 - High, 4 - Very High
+  - `gender`: `r unique(employees$gender)`
+  - `job_involvement`: 1 - Low, 2 - Medium, 3 - High, 4 - Very High
+  - `job_level`: although there is no reliable data definition for this attribute, we can infer this variable is classifying employees based on their grade in the organisation i.e. 1 = Grade 1 (entry-level), ..., 5 = Grade 5 (executive)
+  - `job_role`: `r unique(employees$job_role)`
+  - `job_satisfaction`: 1 - Low, 2 - Medium, 3 - High, 4 - Very High
+  - `marital_status`: `r unique(employees$marital_status)`
+  - `performance_rating`: 1 - Low, 2 - Good, 3 - Excellent, 4 - Outstanding
+  - `relationship_satisfaction`: 1 - Low, 2 - Medium, 3 - High, 4 - Very High
+  - `work_life_balance`: 1 - Bad, 2 - Good, 3 - Better, 4 - Best
+
+- Unuseful variables that can be deleted are:
+  - `employee_count`: all entries in the dataset have an `employee_count` value of 1, which is to be expected as each entry is for 1 employee.
+  - `over18`: all entries in the dataset have `over18` as "Y".
+  - `standard_hours`: all employees in the dataset have the same `standard_hours` of 80 (most likely the standard working hours per fortnight).
+  - `stock_option_level`: there is no reliable definition for this attribute. It can be inferred that a `stock_option_level` of `0` means the employee does not own any IBM stock, however there are no guidelines as to what `1`, `2`, and `3` mean. Hence the attribute is largely useless.
+  - It should be noted that the fields `daily_rate`, `hourly_rate`, and `monthly_rate` make little sense in the dataset. If you divide the `monthly_rate` of an employee by the `daily_rate`, you return a large spread of numbers (see the boxplot below). This simply makes no sense: no employee is working 250+ days in a month. Without a more clear definition of these variables, it would be nonsensical to use them in any real data analysis; the `monthly_income` variable can be used instead. You can read more about this issue [on the Kaggle discussion forums](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset/discussion/319276).
+  
+```{r}
+monthly_over_daily <- employees$monthly_rate / employees$daily_rate
+boxplot(monthly_over_daily, 
+        horizontal = TRUE, 
+        main = "Dividing monthly rate by daily rate", 
+        xlab = "How many days an employee works per month based off rate variables",
+        col = "azure2")
+```
+
+- Some variables have been encoded as `double` but logically should be an `integer`. For example, `age` and `year`-related attributes are usually stored as whole numbers. We can check if any of these attributes have fractional parts by using the modulus operator. Below is a quick program to check this for each column of type `double`.
+
+```{r}
+dbl_cols = c("age", "distance_from_home", "employee_number", "monthly_income", 
+             "num_companies_worked", "percent_salary_hike", "total_working_years",
+             "training_times_last_year", "years_at_company", "years_in_current_role",
+             "years_since_last_promotion", "years_with_curr_manager")
+
+fractional_flag <- 0
+for (col in dbl_cols)
+{
+  if (sum(employees[, col] %% 1 != 0)) # Counts the number of entries where a remainder exists after dividing by 1
+  {
+    cat("There are fractional entries in the", col, "variable.\n")
+    fractional_flag <- 1
+  }
+}
+
+if (!fractional_flag)
+{
+  cat("There are no fractional entries in any columns of type `double`.")
+}
+```
+
+As can be seen from the output above, it is safe to convert these columns to type `integer`.
+
+The code chunks below will perform all the above data cleaning operations.
+
+```{r}
+## Duplicate dataframe ##
+employees_clean <- data.frame(employees)
+```
+
+```{r}
+## Deleting unuseful variables ##
+employees_clean <- subset(employees_clean, select = -c(
+  employee_count, 
+  over18,
+  standard_hours, 
+  stock_option_level, 
+  daily_rate, 
+  hourly_rate, 
+  monthly_rate)
+)
+```
+
+```{r}
+## Convert `attrition` and `overtime` to `logical` datatype ##
+employees_clean$attrition <- ifelse(employees_clean$attrition == "Yes", 1, 0)
+employees_clean$attrition <- as.logical(employees_clean$attrition)
+
+employees_clean$over_time <- ifelse(employees_clean$over_time == "Yes", 1, 0)
+employees_clean$over_time <- as.logical(employees_clean$over_time)
+```
+
+```{r, warning=FALSE}
+## Convert `double` attributes to `integer` datatype
+for (col in dbl_cols)
+{
+  employees_clean[, col] <- as.integer(employees_clean[, col])
+}
+```
+
+```{r}
+## Convert attributes to `factor` datatype ##
+
+categorical_cols <- c("business_travel", "department", "education", "education_field",
+                      "environment_satisfaction", "gender", "job_involvement",
+                      "job_level", "job_role", "job_satisfaction", "marital_status",
+                      "performance_rating", "relationship_satisfaction", "work_life_balance")
+
+for (col in categorical_cols)
+{
+  employees_clean[, col] <- as.factor(employees_clean[, col])
+}
+
+```
+
+Checking if all attributes have been correctly cast to their true datatypes:
+
+```{r}
+glimpse(employees_clean)
+```
+
+# Data analysis and recommendations
+
+The "Great Resignation" — a term almost impossible to miss if you were in the job market for the past 2 years — is a term used to describe the trend where employees have been resigning from their jobs since the second wave of COVID hit in 2021 [@great_resignation]. However, the name is a bit of a half-truth: workforce statistics from late-2021 and 2022 have shown that workforce participation has actually *exceeded* pre-pandemic rates, leading to the conclusion that workers have simply been swapping jobs [@nytimes]. Australia's own Treasurer, Josh Frydenberg, put it best: we are seeing a 'great reshuffle' rather than a 'great resignation' [@reshuffle].
+
+In an attempt to figure out the motivation behind this Great Reshuffle, below we ask two questions: are people who move jobs more often more satisfied with their career? And do they earn more than those who stick with one organisation for a long time?
+
+## Are job-hoppers happier than the rest of us?
+
+How does one measure happiness? Well, without delving into the meaning of life too much, in the context of the IBM dataset we can measure an employee's happiness through a comparison of employees' response to the `job_satisfaction` attribute with the `num_companies_worked` attribute.
+
+```{r}
+ggplot(employees_clean, aes(x = num_companies_worked, fill = job_satisfaction)) +
+  geom_bar(position = position_dodge()) +
+  labs(x = "\nNumber of companies worked at", y = "Number of employees\n", fill = "Job satisfaction") +
+  ggtitle("The job satisfaction of employees based on number of previous employers") + 
+  scale_x_continuous(breaks = c(0:9))
+```
+
+The chart above doesn't show a clear trend; it seems as though there is a fairly stable distribution between each cluster of bars. We can confirm this by calculating the average job satisfaction of an employee given the number of companies they have worked at:
+
+$$
+\frac{1}{\text{Total employees}} \cdot  \sum_{\text{JS} = 1}^4  \, \text{JS} \times \text{Employees}
+$$
+
+where $\text{JS}$ is the Job Satisfaction rating that employee has given in the dataset. The code chunk below will execute the above formula.
+
+```{r, warning=FALSE, message=FALSE}
+job_sat <- employees_clean %>%
+  group_by(num_companies_worked, job_satisfaction) %>%
+  summarise(num_employees = n())
+job_sat[, "js_times_emp"] = as.numeric(as.character(job_sat$job_satisfaction)) * job_sat$num_employees
+
+job_sat_avg <- job_sat %>%
+  group_by(num_companies_worked) %>%
+  summarise(average_js = sum(js_times_emp)/sum(num_employees))
+
+summary(job_sat_avg$average_js)
+```
+
+```{r}
+boxplot(job_sat_avg$average_js,
+        horizontal = TRUE, 
+        main = "Spread of average job satisfaction across all employees", 
+        xlab = "Average job satisfaction (scale of 1 - 4)",
+        col = "azure2")
+
+```
+
+As can be seen from the output above, there is minimal deviation of the average job satisfaction of an employee regardless of the number of previous employers they have had.
+
+## Are job-hoppers earning more than the rest of us?
+
+One of the most common reasons cited for frequently changing jobs is the ability for a person to see large increases in their salary in a relatively short amount of time. Let us see if the data backs this up by comparing the employee's monthly salary with the number of previous employers they have had.
+
+```{r}
+salary_by_employers <- employees_clean %>%
+  group_by(num_companies_worked) %>%
+  summarise(avg_monthly_income = mean(monthly_income))
+```
+
+```{r}
+ salary_by_employers %>%
+  ggplot(aes(x = num_companies_worked, y = avg_monthly_income)) +
+  geom_col(fill = "cornflowerblue") +
+  labs(x = "\nNumber of previous employers", y = "Average monthly income\n") +
+  ggtitle("Average monthly salary of employes by total number of previous employers") + 
+  scale_x_continuous(breaks = c(0:9)) + 
+  geom_text(aes(label = round(avg_monthly_income, 1)), vjust = -0.5, size = 3)
+```
+
+Now, although it is tempting to eyeball the association between monthly income and number of previous employers, we can statistically determine whether there is any significance using a $\chi^2$ Goodness of Fit test. Setting up our hypotheses:
+
+$H_0$: The average monthly income is uniformly distributed regardless of the number of previous employers, i.e. $p_i = c \; \forall \; i \in [0, 9], \, c \in \mathbb{R}$
+
+$H_1$: The average monthly income is not uniformly distributed, i.e. $\exists \; i \in [0, 9] : p_i \neq c$
+
+By continuing with the $\chi^2$ test, we must check the assumptions that no categories are empty, and none of the expected counts are less than 5 (Cochran's rule). These assumptions most definitely hold in our case.
+
+Now we can calculate the test statistic and $p$-value for the chi-square test.
+
+```{r, warning=FALSE}
+test_gof <- chisq.test(salary_by_employers)
+test_gof
+```
+
+Hence the test statistic ($\chi^2$) is `r round(test_gof$statistic, 2)` and the $p$-value is `r round(test_gof$p.value, 2)`. 
+
+The $p$-value, although very close to 0.05, has not surpassed this statistical significance threshold. The results of our statistical test have not been convincing enough to reliably suggest a rejection of the null hypothesis, and thus the average monthly income is likely to be uniformly distributed among employees regardless of the number of previous employers they have had. This is great news for employees who are worried they are "missing out" by staying in one organisation for a long period of time.
+
+## Recommendations
+
+It is clear from the above two analyses that neither job satisfaction nor monthly income is greatly benefited from by frequently changing jobs. The study shows that a young graduate or worker who is still new to the workforce should not be too phased by the "Great Resignation", as they are not missing out on too many benefits from staying in one organisation for a long period of time.
+
+# References
