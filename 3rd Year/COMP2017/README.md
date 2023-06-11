@@ -4,7 +4,9 @@
 
 Ah, COMP2017 – the most infamous, the most notoriously difficult computer science unit at USYD. 
 
-I'm pleased to say that I really, really enjoyed this unit. I think a reason for that is the fact that they have really simplified this unit compared to previous years. This semester there was no final exam; only 4 internal assessments:
+I'm pleased to say that I really, really enjoyed this unit. The unit is purely assessed through programming whilst teaching you some really interesting concepts such as memory management, processes, pipes, threads, and deadlocks.
+
+Note that they have really simplified this unit compared to previous years. This semester there was no final exam; only 4 internal assessments:
 
 - A1: Basic C programming assignment (10%)
 - A2: Creating a RISC-V 32I emulator (5% + 30% viva)
