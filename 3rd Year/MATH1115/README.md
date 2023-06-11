@@ -14,6 +14,6 @@ You can find our code here: https://github.com/antrikshdhand/math1115-project-1
 
 ### Project 2
 
-Project 2 was largely similar to Project 1 except that we were given the choice out of two datasets, and we were expected to pose as a stakeholder of our choosing when proposing research questions. It was also an individual project. The code has been added to the current folder.
+Project 2 was largely similar to Project 1 except that we were given the choice out of two datasets, and we were expected to pose as a stakeholder of our choosing when proposing research questions. It was also an individual project. The code can be found in the current directory.
 
 Both these assignments received 10/10.
