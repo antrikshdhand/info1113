@@ -1,5 +1,7 @@
 # MATH1005
 
+*Taken in 2021 Semester 2*
+
 The project I have uploaded here is the individual project we had to complete towards the end of semester.
 
 Students were required to select from one of four data stories. I chose the data story regarding the Sydney Cross City Tunnel, and pitched it as Sydney's most blundered infrastructure project. I utilised numerical and graphical summaries to prove this, as well as plenty of background research and citations to back up my claims. 

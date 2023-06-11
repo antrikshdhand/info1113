@@ -1,5 +1,7 @@
 # AERO1560
 
+*Taken in 2021 Semester 1*
+
 ## Assignment 1
 **Aircraft/Spacecraft Familiarity Exercise**
 
