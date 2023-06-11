@@ -1,4 +1,4 @@
-# A2: `vm_RISKXVII`
+# `vm_RISKXVII`
 
 The most fun I've ever had doing an assignment in computer science at USYD was this assignment.
 
