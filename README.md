@@ -35,8 +35,9 @@ A subject in **bold** means I have some coursework uploaded to this repository f
     └── <b>ELEC1601: Introduction to Computer Systems</b>
 
 3rd Year
-    ├── COMP2017: System's Programming
-    ├── COMP2123: Data Structures and Algorithms
-    ├── ISYS2110: Analysis and Design of Web Info Systems
+└── Semester 1
+    ├── <b>COMP2017: System's Programming</b>
+    ├── <b>COMP2123: Data Structures and Algorithms</b>
+    ├── <b>ISYS2110: Analysis and Design of Web Info Systems</b>
     └── STAT2011: Probability and Estimation Theory
 </pre>

@@ -1,0 +1,132 @@
+PC @ 0: ADDI RD= 2, RS1 = 0, IMM = 2047
+PC @ 4: JAL RD = 1, IMM = 44,  
+PC @ 48: ADDI RD= 2, RS1 = 2, IMM = -16
+PC @ 52: SW RS1 = 2, RS2 = 1, IMM = 12
+PC @ 56: ADDI RD= 10, RS1 = 0, IMM = 80
+PC @ 60: JAL RD = 1, IMM = -44,  
+PC @ 16: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 20: BEQ RS1 = 15, RS2 = 0, IMM = 24,
+PC @ 24: LUI RD = 14, IMM = 4096, 
+PC @ 28: ADDI RD= 10, RS1 = 10, IMM = 1
+PC @ 32: SB RS1 = 14, RS2 = 15, IMM = -2048
+HPC @ 36: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 40: BNE RS1 = 15, RS2 = 0, IMM = -12, 
+PC @ 28: ADDI RD= 10, RS1 = 10, IMM = 1
+PC @ 32: SB RS1 = 14, RS2 = 15, IMM = -2048
+ePC @ 36: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 40: BNE RS1 = 15, RS2 = 0, IMM = -12, 
+PC @ 28: ADDI RD= 10, RS1 = 10, IMM = 1
+PC @ 32: SB RS1 = 14, RS2 = 15, IMM = -2048
+lPC @ 36: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 40: BNE RS1 = 15, RS2 = 0, IMM = -12, 
+PC @ 28: ADDI RD= 10, RS1 = 10, IMM = 1
+PC @ 32: SB RS1 = 14, RS2 = 15, IMM = -2048
+lPC @ 36: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 40: BNE RS1 = 15, RS2 = 0, IMM = -12, 
+PC @ 28: ADDI RD= 10, RS1 = 10, IMM = 1
+PC @ 32: SB RS1 = 14, RS2 = 15, IMM = -2048
+oPC @ 36: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 40: BNE RS1 = 15, RS2 = 0, IMM = -12, 
+PC @ 28: ADDI RD= 10, RS1 = 10, IMM = 1
+PC @ 32: SB RS1 = 14, RS2 = 15, IMM = -2048
+,PC @ 36: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 40: BNE RS1 = 15, RS2 = 0, IMM = -12, 
+PC @ 28: ADDI RD= 10, RS1 = 10, IMM = 1
+PC @ 32: SB RS1 = 14, RS2 = 15, IMM = -2048
+PC @ 36: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 40: BNE RS1 = 15, RS2 = 0, IMM = -12, 
+PC @ 28: ADDI RD= 10, RS1 = 10, IMM = 1
+PC @ 32: SB RS1 = 14, RS2 = 15, IMM = -2048
+wPC @ 36: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 40: BNE RS1 = 15, RS2 = 0, IMM = -12, 
+PC @ 28: ADDI RD= 10, RS1 = 10, IMM = 1
+PC @ 32: SB RS1 = 14, RS2 = 15, IMM = -2048
+oPC @ 36: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 40: BNE RS1 = 15, RS2 = 0, IMM = -12, 
+PC @ 28: ADDI RD= 10, RS1 = 10, IMM = 1
+PC @ 32: SB RS1 = 14, RS2 = 15, IMM = -2048
+rPC @ 36: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 40: BNE RS1 = 15, RS2 = 0, IMM = -12, 
+PC @ 28: ADDI RD= 10, RS1 = 10, IMM = 1
+PC @ 32: SB RS1 = 14, RS2 = 15, IMM = -2048
+lPC @ 36: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 40: BNE RS1 = 15, RS2 = 0, IMM = -12, 
+PC @ 28: ADDI RD= 10, RS1 = 10, IMM = 1
+PC @ 32: SB RS1 = 14, RS2 = 15, IMM = -2048
+dPC @ 36: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 40: BNE RS1 = 15, RS2 = 0, IMM = -12, 
+PC @ 28: ADDI RD= 10, RS1 = 10, IMM = 1
+PC @ 32: SB RS1 = 14, RS2 = 15, IMM = -2048
+!PC @ 36: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 40: BNE RS1 = 15, RS2 = 0, IMM = -12, 
+PC @ 28: ADDI RD= 10, RS1 = 10, IMM = 1
+PC @ 32: SB RS1 = 14, RS2 = 15, IMM = -2048
+PC @ 36: LBU RD = 15, RS1 = 10, IMM = 0
+PC @ 40: BNE RS1 = 15, RS2 = 0, IMM = -12, 
+PC @ 44: JALR RD = 0, RS1 = 1, IMM = 0
+PC @ 64: ADDI RD= 10, RS1 = 0, IMM = 0
+PC @ 68: LW RD = 1, IMM = 12
+PC @ 72: ADDI RD= 2, RS1 = 2, IMM = 16
+PC @ 76: JALR RD = 0, RS1 = 1, IMM = 0
+PC @ 8: LUI RD = 15, IMM = 4096, 
+PC @ 12: SB RS1 = 15, RS2 = 0, IMM = -2036
+
+CPU Halt Requested
+
+Process finished with exit code 1
+
+0 (addi) = REGISTER[2] = REGISTER[1] + imm (0 +2047) REG[2] = 2047;
+
+4 (JAL)   = REGISTER[1] = 4 + 4 = 8 and PC JUMPS TO 44(IMM) + 8 Jumps to 48
+
+48 (ADDI) = REGISTER[2] = REGISTER[2] +  (-32) REG[2] = 2015
+
+52 SW = MEMORY[2015 + 28] = MEMORY[2043] || MEMORY[2043] stores REG[1] = 8
+
+56 SW = MEMORY[2015 + 24] = MEMORY[2039] || MEMORY[2039] stores REG[8] = 0
+
+60 SW = MEMORY[2015 + 20] = MEMORy[2035] || MEMORY[2035] stores REG[9] = 0
+
+64 SW = MEMORY[2015 + 16] = MEMORY[2031] || MEMORY[2031] stores REG[18] =0
+
+68 SW = MEMORY[2015 + 12] = MEMORY[2027] || MEMORY[2027] stores REG[19] = 0
+
+72 SW = MEMORY[2015+8] = MEMORY[2023] || MEMORY[2023] stores REG[20] = 0
+
+76 LUI = REGISTER[9] = 4096 (imm)
+
+80 ADDI = REGISTER[8] = REGISTER[9] - 2026 (IMM) = 0x1000 + 0xfffff816 = 0x816 or 2070
+
+84 LW = MEMORY[2070 + 0]  which stores first user input into register[19] in this case 5
+
+88 LW = MEMORY[2070 + 0] which stores second user input into register[8] in this case 1
+
+92 ADDI = REGISTER[10] = REG[0] + IMM(176) , REGISTER[10] = 176
+
+96 JAL = REGISTER[1] = 100 JUMP TO 16
+
+16 LBU = REGISTER[15] = MEMORY[REGISTER[10] + 0] = MEMORY[176] : REGISTER[15] = 48 = 0x30
+
+20 BEQ = VALUE IN REGISTER[15] = 48 != VALUE IN REGISTER[0] = 0 Go To 24
+
+24 LUI  REGISTER[14] = 4096
+
+28 ADDI REGISTER[10] = REGISTER[10] + 1;
+
+32 SB MEMORY[REG[14] - 2048] = MEMORY[2048]  stores REGISTER[15] = 48  ALSO PRINTS TO CONSOLE_CHAR 0
+
+36 LBU REGISTER[15] = MEMORY[Register[10] + 0] therefore REGISTER 15 = MEMORY[177 + 0]  which means is REGISTER 15 = ??? (if we trust the program, r15 = 120)
+
+40 BNE  REGISTER[15]  NOT EQUAL TO REGISTER[0] IS TRUE SO  BRANCH TOO 28
+
+28 ADDI REGISTER[10] = REGISTER[10] + 1; REGISTER 10 is equal to 178
+
+32 SB MEMORY[REGISTER[14] + IMM] so  MEMORY[4096-2048] = 2048  CALL -> CONSOLE_PRINT_CHAR (x) DONT STORE ANYTHING
+
+36 LBU REGISTER[15] =  MEMORY[REGISTER[10] + imm} there REGISTER[15] = MEMORY[178 + 0];
+
+40 BNE (BRANCH NOT EQUAL)  REGISTER[15] = 178, REGISTER[0] = 0 THEREFORE Continue to 44
+
+44 JALR REGISTER[0] (DON'T WRITE) JUST EXECUETE THE JUMp, PC = REGISTER[1] + IMM  JUMP TO 100
+
+100 SLL (ALMOST THERE)
