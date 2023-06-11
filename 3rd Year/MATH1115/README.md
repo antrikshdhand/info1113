@@ -2,7 +2,7 @@
 
 *Taken in 2023 Intensive January*
 
-The combination of MATH1005 and MATH1115 is equivalent to DATA1001. This unit focuses on the more "data science"-focused topics, especially how to use the `tidyverse` packages in R to more effectively manipulate data.
+The combination of MATH1005 and MATH1115 is equivalent to DATA1001. Hence, in comparison to MATH1005, this unit focuses on the more "data science"-focused topics, especially how to use the `tidyverse` packages in R to more effectively manipulate data.
 
 The unit consisted of two projects each worth 10%, one which was to be done in a group and one individual project.
 
