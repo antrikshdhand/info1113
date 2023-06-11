@@ -1,6 +1,6 @@
 # USYD Coursework
 
-The following repository holds any projects or assignments which I have deemed worthy of sharing from my coursework at USYD. By no means is my work perfect but if this helps any students out then I'm happy to share.
+The following repository holds any projects or assignments from my coursework at USYD which I think are worthy of sharing with future students. 
 
 Degree: Bachelor of Software Engineering/Bachelor of Science (Mathematical Sciences) (Data Science)
 
@@ -11,12 +11,12 @@ A subject in **bold** means I have some coursework uploaded to this repository f
 
 <pre>
 1st Year
-├── Semester 1
-│   ├── <b>AERO1560: Introduction to Aerospace Engineering</b>
-│   ├── ENGG1810: Introduction to Engineering Computing
-│   ├── <b>MATH1002: Linear Algebra</b>
-│   ├── MATH1921: Calculus Of One Variable (Advanced)
-|   └── PHYS1903: PHYS1903: Physics 1A (Special Studies Program)
+└── Semester 1
+    ├── <b>AERO1560: Introduction to Aerospace Engineering</b>
+    ├── ENGG1810: Introduction to Engineering Computing
+    ├── <b>MATH1002: Linear Algebra</b>
+    ├── MATH1921: Calculus Of One Variable (Advanced)
+    └── PHYS1903: PHYS1903: Physics 1A (Special Studies Program)
 └── Semester 2
     ├── <b>AMME1362: Materials 1</b>
     ├── AMME1802: Engineering Mechanics
@@ -33,4 +33,10 @@ A subject in **bold** means I have some coursework uploaded to this repository f
     ├── <b>SOFT2412: Agile Software Development Practices</b>
     ├── <b>ISYS2120: Data and Information Management</b>
     └── <b>ELEC1601: Introduction to Computer Systems</b>
+
+3rd Year
+    ├── COMP2017: System's Programming
+    ├── COMP2123: Data Structures and Algorithms
+    ├── ISYS2110: Analysis and Design of Web Info Systems
+    └── STAT2011: Probability and Estimation Theory
 </pre>
