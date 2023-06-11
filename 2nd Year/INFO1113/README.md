@@ -1,5 +1,7 @@
 # INFO1113: Lawn Layer Assignment
 
+*Taken in 2022 Semester 1*
+
 The following repository holds my INFO1113 2022 Semester 1 coding assignment. 
 
 This assignment took about 30-40 hours of work. As INFO1113 is a beginner Java unit, this code is not extremely beautiful nor concise, nor does it utilise any rigorous software design theory. Rather, this work was focused on learning the essence of Java including OOP (encapsulation, inheritance, polymorphism), enums, simple data structures such as ArrayLists etc.
