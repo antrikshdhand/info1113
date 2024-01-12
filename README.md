@@ -42,4 +42,10 @@ A subject in **bold** means I have some coursework uploaded to this repository f
     ├── <b>COMP2123: Data Structures and Algorithms</b>
     ├── ISYS2110: Analysis and Design of Web Info Systems
     └── STAT2011: Probability and Estimation Theory
+└── Semester 2 (NUS Semester Exchange)
+    ├── CS2104: Programming Language Concepts [COMP3109]
+    ├── CS2113: Software Engineering & OOP [SOFT2201]
+    ├── CS3230: Algorithm Design [COMP3027]
+    ├── LAH1201: Hindi 1
+    └── ST3131: Regression Analysis [STAT3022]
 </pre>
