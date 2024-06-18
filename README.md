@@ -29,6 +29,8 @@ A subject in **bold** means I have some coursework uploaded to this repository f
     ├── DATA2001: Data Science, Big Data and Data Variety
     ├── <b>INFO1113: Object-Oriented Programming</b>
     └── MATH2069: Discrete Mathematics and Graph Theory
+└── Intensive July
+    └── OLET1666: Writing with LaTeX
 └── Semester 2
     ├── <b>SOFT2412: Agile Software Development Practices</b>
     ├── <b>ISYS2120: Data and Information Management</b>
@@ -48,4 +50,15 @@ A subject in **bold** means I have some coursework uploaded to this repository f
     ├── CS3230: Algorithm Design [COMP3027]
     ├── LAH1201: Hindi 1
     └── ST3131: Regression Analysis [STAT3022]
+
+4th Year
+└── Semester 1
+    ├── COMP3608: Introduction to Artifical Intelligence (Advanced)
+    ├── ELEC5618: Software Quality Engineering
+    ├── ENGD3004: Innovations for Global Peace and Education
+    ├── OLET1311: Managing Your Project
+    ├── SCDL3991: Science Dalyell Individual Research Project
+    └── SOFT3202: Software Construction and Design 2
+└── Semester 2
+    └── ELEC4714: Major Industrial Project [ESIPS]
 </pre>
