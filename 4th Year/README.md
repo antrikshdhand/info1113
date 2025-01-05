@@ -8,4 +8,4 @@ Most work this semester was group work, and hence I cannot share those assignmen
 
 ## Semester 2
 
-I am completing the ESIPS program which replaces my semester with a full-time industry placement.
+Completed my thesis through the ESIPS program at Thales Under Water Systems. See my final dissertation and presentation [here](https://github.com/antrikshdhand/thesis).
